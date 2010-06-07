@@ -1,0 +1,68 @@
+ActsAsSlideshow
+===============
+
+This plugin lets you easily embed the Flex Slideshow component into your rails application.
+All that is required to be done is to install it in the vendor/plugins directory and user and
+photo models in place. Also this plugin could be used as a reference for creating rails plugins.
+
+Usage:
+
+Plugin provides a helper method 'embed_slideshow_tag' which lets you embed the Flex component
+directly into your views. By default, the helper method would embed the supplied Flex_slideshow
+component. As an addition, an argument could be passed to the method for using any other flex
+file.
+
+On the controller level, one needs to render user photo data using 'get_photo_data_xml' method
+provided by the plugin. 
+
+The Flex component uses a config xml file for setting the URI which is used for getting the user
+photo information in xml format. Example shown below would have the URI in config file set as
+http://localhost:3000/gallery/show_xml
+
+Plugin provides rake tasks for copying the default Flex slideshow and config files to the public/flash 
+directory.
+
+
+Example
+=======
+
+Run from Rails application root directory:
+1) rake slideshow:copy_flash_file
+2) rake slideshow:copy_config_file
+
+Both of the rake tasks could be run using the following task:
+1) rake slideshow:copy_both
+
+Using the ruby/script generator, user photos migration (if not already present) can be 
+generated and executed.
+1) ruby script/generate acts_as_slideshow_migration
+2) rake db:migrate
+
+View: (app/views/gallery/show_slideshow.html.erb)
+
+<%= embed_slideshow_tag %>
+
+Controller: (app/controllers/gallery/show_xml)
+
+def show_xml
+  user = User.find(session[:current_user])
+  render :xml => user.get_photo_data_xml
+end
+
+Config.xml
+
+<root>
+  <config>
+    <flex-app-title>Smartsourcing Global Flex SlideShow</flex-app-title>
+    <DataUrl><![CDATA[http://localhost:3000/gallery/show_xml]]></DataUrl>
+    <thumb-width>100</thumb-width>
+    <thumb-height>120</thumb-height>
+  </config>
+</root>
+
+
+Credits
+======
+Gaurav Sohoni | gauravsohoni@gmail.com
+
+------------------------------------------------------------------------------
